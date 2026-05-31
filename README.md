@@ -2,39 +2,36 @@
 
 > **[简体中文](README_CN.md) | English**
 
-A free, open-source tool to batch-download academic paper metadata — titles, authors, journals, years, volumes, issues, DOIs, and abstracts.
+**You need to read 50 papers across 5 journals for your literature review.**  
+Be honest — how long would it take you to visit each journal's website, type keywords one by one, flip through pages, and copy every title and abstract into a spreadsheet?
 
-> **No API key required. Completely free.**
-> Perfect for: literature reviews, grant proposal references, thesis preparation, and systematic paper screening.
+Now imagine saying this to your AI once:
+
+> *"Search JIE, JIMF and AER for papers on exchange rate and tail risk from 2020 to 2025."*
+
+And getting back a clean Excel table — titles, authors, DOIs, abstracts — in under a minute.
+
+That's what this tool does. **No API key. No paywall. No manual labor.**
 
 ---
 
-## What It Does
-
-If you are a graduate student or researcher who needs to find papers from specific journals on certain topics, this tool can help:
-
-1. **Search** across multiple journals, keywords, and year ranges at once
-2. **Auto-scroll** through all matching papers (no manual pagination)
-3. **Extract** year, authors, title, journal, volume, issue, DOI, and abstract from every paper
-4. **Deduplicate** — papers matching multiple keywords appear only once
-5. **Suggest related keywords** — discover new search terms from the topic labels of your matched papers
-6. **Export** results to **Excel** spreadsheets or **Markdown** documents (easy to paste into Word, Notion, or Overleaf)
-
-### A Quick Example
+### What comes out?
 
 ```bash
 python scripts/cli.py \
   --journals "Journal of International Economics, Journal of Finance" \
   --keywords "exchange rate, tail risk" \
   --year-start 2020 --year-end 2025 \
-  --output ./my_results \
-  --json
+  --output ./my_results
 ```
 
-After running, you get:
-- `my_results.xlsx` — Open in Excel, filter, sort, search
-- `my_results.md` — Literature list with abstracts, ready for your notes
-- `my_results.json` — Machine-readable for further processing
+| You get | What it's good for |
+|---------|-------------------|
+| `my_results.xlsx` | Open in Excel, filter, sort, search |
+| `my_results.md` | Abstracts ready for your notes or Overleaf |
+| `keyword recommendations` | Discover what else you should search for |
+
+**If you can describe what papers you need, this tool can fetch them.**
 
 ---
 
