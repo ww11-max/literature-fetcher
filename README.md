@@ -2,20 +2,13 @@
 
 > **[简体中文](README_CN.md) | English**
 
-**You need to read 50 papers across 5 journals for your literature review.**  
-Be honest — how long would it take you to visit each journal's website, type keywords one by one, flip through pages, and copy every title and abstract into a spreadsheet?
+A free, open-source tool that batch-fetches academic paper metadata from the OpenAlex database. Give it a list of journals, keywords, and a year range — it searches across all combinations, deduplicates results, and outputs a structured table with titles, authors, DOIs, and abstracts.
 
-Now imagine saying this to your AI once:
+No API key needed. No per-journal website visits. Most queries complete in under a minute.
 
-> *"Search JIE, JIMF and AER for papers on exchange rate and tail risk from 2020 to 2025."*
-
-And getting back a clean Excel table — titles, authors, DOIs, abstracts — in under a minute.
-
-That's what this tool does. **No API key. No paywall. No manual labor.**
+**Output:** Excel (.xlsx), Markdown (.md), plus optional keyword recommendations.
 
 ---
-
-### What comes out?
 
 ```bash
 python scripts/cli.py \
@@ -23,15 +16,9 @@ python scripts/cli.py \
   --keywords "exchange rate, tail risk" \
   --year-start 2020 --year-end 2025 \
   --output ./my_results
+
+# Returns: my_results.xlsx, my_results.md, keyword recommendations
 ```
-
-| You get | What it's good for |
-|---------|-------------------|
-| `my_results.xlsx` | Open in Excel, filter, sort, search |
-| `my_results.md` | Abstracts ready for your notes or Overleaf |
-| `keyword recommendations` | Discover what else you should search for |
-
-**If you can describe what papers you need, this tool can fetch them.**
 
 ---
 
