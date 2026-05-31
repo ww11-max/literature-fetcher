@@ -38,7 +38,9 @@ After running, you get:
 
 ---
 
-## Quick Start
+## Quick Start — Use with AI Assistants
+
+This tool is designed to work with Claude, Codex, OpenClaw, or any terminal-based AI coding assistant. Once set up, you just need to tell the AI what literature you need — the AI will run the tool for you.
 
 ### 1. Install Dependencies
 
@@ -55,19 +57,51 @@ git clone https://github.com/ww11-max/literature-fetcher.git
 cd literature-fetcher
 ```
 
-### 3. Run Your First Search
+### 3. Add the Scripts Path to Your AI Assistant's Context
 
-Search three journals for papers about "tail risk" and "exchange rate" from 2020 to 2025:
+For AI assistants to find and run this tool, specify the full path to the `scripts/` folder in your prompt. Examples:
 
-```bash
-python scripts/cli.py \
-  --journals "Journal of International Money and Finance, Journal of International Economics, Journal of Finance" \
-  --keywords "tail risk, exchange rate" \
-  --year-start 2020 --year-end 2025 \
-  --output ./my_literature
+**In Claude Code:**
+```
+I have a literature fetcher tool at ./literature-fetcher/scripts/cli.py.
+Search Journal of International Economics and JIMF for papers on
+"exchange rate" and "tail risk" from 2020 to 2025.
 ```
 
-That's it. The tool will print progress as it searches, then save the results.
+**In Codex / Windsurf / Cursor:**
+```
+Run: python literature-fetcher/scripts/cli.py \
+  --journals "Journal of International Economics, JIMF" \
+  --keywords "exchange rate, tail risk" \
+  --year-start 2020 --year-end 2025 \
+  --output ./my_results
+```
+
+**In OpenClaw or any MCP-compatible terminal agent:**
+```
+Tool: python literature-fetcher/scripts/cli.py
+Args: --journals "JIMF, AER" --keywords "monetary policy, spillover"
+      --year-start 2023 --year-end 2025 --output ./results
+```
+
+### 4. One-Step Command (works with any assistant)
+
+Once cloned, you can ask any AI assistant to run this single line:
+
+```bash
+python ./literature-fetcher/scripts/cli.py \
+  --journals "Journal of International Money and Finance, Journal of International Economics, Journal of Finance" \
+  --keywords "tail risk, exchange rate, financial contagion" \
+  --year-start 2020 --year-end 2025 \
+  --output ./my_literature \
+  --json --recommend-keywords
+```
+
+The AI will execute it, and you'll get:
+- `my_literature.xlsx` — Open in Excel
+- `my_literature.md` — Literature list with abstracts
+- `my_literature.json` — Machine-readable data  
+- `my_literature_keyword_recommendations.md` — Suggested new search terms
 
 ---
 

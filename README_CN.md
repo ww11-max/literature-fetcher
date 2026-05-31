@@ -38,7 +38,9 @@ python scripts/cli.py \
 
 ---
 
-## 快速上手
+## 快速上手 — 配合AI助手使用
+
+这个工具专门设计给 Claude、Codex、OpenClaw 等终端型 AI 编程助手调用。你只需要告诉 AI 你要什么文献，AI 就会自动运行这个工具帮你搜。
 
 ### 1. 安装依赖
 
@@ -55,17 +57,52 @@ git clone https://github.com/ww11-max/literature-fetcher.git
 cd literature-fetcher
 ```
 
-### 3. 运行搜索
+### 3. 在 AI 助手中调用
 
-搜索三个期刊中关于"tail risk"和"exchange rate"的文献：
+告诉 AI 工具的路径，然后描述你的检索需求即可。以下是几个示例：
+
+**在 Claude Code 中：**
+```
+我有一个文献检索工具，路径在 ./literature-fetcher/scripts/cli.py。
+帮我搜 Journal of International Economics 和 JIMF 这两个期刊上，
+2020年到2025年间关于"exchange rate"和"tail risk"的论文，
+输出到 ./my_results。
+```
+
+**在 Codex / Windsurf / Cursor 中：**
+```
+帮我执行: python literature-fetcher/scripts/cli.py \
+  --journals "Journal of International Economics, JIMF" \
+  --keywords "exchange rate, tail risk" \
+  --year-start 2020 --year-end 2025 \
+  --output ./my_results
+```
+
+**在 OpenClaw 或其他 MCP 终端代理中：**
+```
+工具路径: python literature-fetcher/scripts/cli.py
+参数: --journals "JIMF, AER" --keywords "monetary policy, spillover"
+      --year-start 2023 --year-end 2025 --output ./results
+```
+
+### 4. 一句命令直达
+
+下载完成后，你也可以直接让 AI 跑这一行：
 
 ```bash
-python scripts/cli.py \
+python ./literature-fetcher/scripts/cli.py \
   --journals "Journal of International Money and Finance, Journal of International Economics, Journal of Finance" \
-  --keywords "tail risk, exchange rate" \
+  --keywords "tail risk, exchange rate, financial contagion" \
   --year-start 2020 --year-end 2025 \
-  --output ./my_literature
+  --output ./my_literature \
+  --json --recommend-keywords
 ```
+
+执行后你会得到：
+- `my_literature.xlsx` — 可直接用 Excel 打开
+- `my_literature.md` — 带摘要的文献列表
+- `my_literature.json` — 机器可读的数据
+- `my_literature_keyword_recommendations.md` — 推荐的新搜索词
 
 ---
 
