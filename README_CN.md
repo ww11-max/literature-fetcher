@@ -38,9 +38,9 @@ python scripts/cli.py \
 
 ---
 
-## 快速上手 — 配合AI助手使用
+## 快速上手 — 安装到AI助手中一键调用
 
-这个工具专门设计给 Claude、Codex、OpenClaw 等终端型 AI 编程助手调用。你只需要告诉 AI 你要什么文献，AI 就会自动运行这个工具帮你搜。
+本工具可作为 **MCP 工具** 安装到你的 AI 编程助手中。装好后，你只需要用自然语言告诉 AI "帮我搜文献"，它就会自动执行——**不需要记路径，不需要输命令**。
 
 ### 1. 安装依赖
 
@@ -55,7 +55,94 @@ pip install requests pandas openpyxl
 ```bash
 git clone https://github.com/ww11-max/literature-fetcher.git
 cd literature-fetcher
+# 获取绝对路径，下一步要用：
+pwd   # ← 复制输出的路径
 ```
+
+### 3. 安装到你的 AI 工具
+
+选择你用的 AI 工具，按以下方式配置一次即可。
+
+---
+
+#### • 安装到 Claude Code
+
+编辑 `~/.claude/settings.json`（全局）或项目下的 `.claude/settings.json`：
+
+```json
+{
+  "mcpServers": {
+    "literature-fetcher": {
+      "command": "python",
+      "args": ["/你电脑上的绝对路径/literature-fetcher/scripts/mcp_server.py"]
+    }
+  }
+}
+```
+
+**配置后，在 Claude Code 里直接说：**
+> 帮我搜 Journal of International Economics 和 JIMF 上关于 exchange rate 和 tail risk 的论文，2020-2025年。
+
+---
+
+#### • 安装到 Codex / Windsurf
+
+在 Windsurf 中打开 `设置 → MCP Servers → 添加 MCP Server`：
+
+| 字段 | 值 |
+|------|-----|
+| 名称 | `literature-fetcher` |
+| 类型 | `command` |
+| 命令 | `python /你电脑上的绝对路径/literature-fetcher/scripts/mcp_server.py` |
+
+**配置后，在 Windsurf / Codex 里直接说：**
+> 用 literature-fetcher 搜 JIMF，关键词 financial contagion, spillover，年份 2022-2025
+
+---
+
+#### • 安装到 OpenClaw
+
+在 OpenClaw 的 MCP 配置中添加：
+
+```json
+{
+  "mcpServers": {
+    "literature-fetcher": {
+      "command": "python",
+      "args": ["/你电脑上的绝对路径/literature-fetcher/scripts/mcp_server.py"]
+    }
+  }
+}
+```
+
+**配置后，在 OpenClaw 里直接说：**
+> Use literature-fetcher to search AER, JIE, JIMF. Keywords: monetary policy, exchange rate. 2020-2025.
+
+---
+
+#### • 安装到 Cursor
+
+打开 `Cursor Settings → MCP Servers → Add New MCP Server`：
+
+| 字段 | 值 |
+|------|-----|
+| 名称 | `literature-fetcher` |
+| 类型 | `command` |
+| 命令 | `python /你电脑上的绝对路径/literature-fetcher/scripts/mcp_server.py` |
+
+**配置后，在 Cursor 里直接说：**
+> 用 literature-fetcher 搜 Journal of Finance 和 JFE 上关于 tail risk 和 currency 的论文，2020-2025年。
+
+---
+
+### 4. 安装后能得到什么？
+
+安装好后，你只需要用大白话说需求。AI 会调用工具并返回：
+- ✅ 文献数量和摘要预览
+- ✅ Excel 文件（可直接打开筛选）
+- ✅ Markdown 文件（可粘贴到笔记或论文中）
+- ✅ 关键词推荐（开启后，AI 会告诉你还可以搜哪些相关词）
+- ✅ 前5条结果预览（标题、年份、作者）
 
 ### 3. 在 AI 助手中调用
 

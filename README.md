@@ -38,13 +38,11 @@ After running, you get:
 
 ---
 
-## Quick Start — Use with AI Assistants
+## Quick Start — Install & Invoke Inside AI Assistants
 
-This tool is designed to work with Claude, Codex, OpenClaw, or any terminal-based AI coding assistant. Once set up, you just need to tell the AI what literature you need — the AI will run the tool for you.
+This tool can be installed as an **MCP tool** into your AI coding assistant. Once installed, you just tell the AI "search these journals for these keywords" — it runs automatically. No path typing, no command remembering.
 
 ### 1. Install Dependencies
-
-Requires Python 3.8 or higher.
 
 ```bash
 pip install requests pandas openpyxl
@@ -55,53 +53,94 @@ pip install requests pandas openpyxl
 ```bash
 git clone https://github.com/ww11-max/literature-fetcher.git
 cd literature-fetcher
+# Get the absolute path for later:
+pwd   # ← copy this path, you'll need it in step 3
 ```
 
-### 3. Add the Scripts Path to Your AI Assistant's Context
+### 3. Install into Your AI Assistant
 
-For AI assistants to find and run this tool, specify the full path to the `scripts/` folder in your prompt. Examples:
+Choose your AI tool below and follow the one-time setup.
 
-**In Claude Code:**
-```
-I have a literature fetcher tool at ./literature-fetcher/scripts/cli.py.
-Search Journal of International Economics and JIMF for papers on
-"exchange rate" and "tail risk" from 2020 to 2025.
-```
+---
 
-**In Codex / Windsurf / Cursor:**
-```
-Run: python literature-fetcher/scripts/cli.py \
-  --journals "Journal of International Economics, JIMF" \
-  --keywords "exchange rate, tail risk" \
-  --year-start 2020 --year-end 2025 \
-  --output ./my_results
-```
+#### • Install into Claude Code
 
-**In OpenClaw or any MCP-compatible terminal agent:**
-```
-Tool: python literature-fetcher/scripts/cli.py
-Args: --journals "JIMF, AER" --keywords "monetary policy, spillover"
-      --year-start 2023 --year-end 2025 --output ./results
+Add to `~/.claude/settings.json` (global) or `.claude/settings.json` (per project):
+
+```json
+{
+  "mcpServers": {
+    "literature-fetcher": {
+      "command": "python",
+      "args": ["/ABSOLUTE/PATH/TO/literature-fetcher/scripts/mcp_server.py"]
+    }
+  }
+}
 ```
 
-### 4. One-Step Command (works with any assistant)
+**Then inside Claude Code, just say:**
+> Search Journal of International Economics and JIMF for exchange rate and tail risk papers, 2020-2025.
 
-Once cloned, you can ask any AI assistant to run this single line:
+---
 
-```bash
-python ./literature-fetcher/scripts/cli.py \
-  --journals "Journal of International Money and Finance, Journal of International Economics, Journal of Finance" \
-  --keywords "tail risk, exchange rate, financial contagion" \
-  --year-start 2020 --year-end 2025 \
-  --output ./my_literature \
-  --json --recommend-keywords
+#### • Install into Codex / Windsurf
+
+In Windsurf, go to `Settings → MCP Servers → Add MCP Server` and paste:
+
+| Field | Value |
+|-------|-------|
+| Name | `literature-fetcher` |
+| Type | `command` |
+| Command | `python /ABSOLUTE/PATH/TO/literature-fetcher/scripts/mcp_server.py` |
+
+**Then in Windsurf / Codex, just say:**
+> Use literature-fetcher: journals=JIMF keywords=financial contagion, spillover years=2022-2025
+
+---
+
+#### • Install into OpenClaw
+
+Add to your OpenClaw MCP config:
+
+```json
+{
+  "mcpServers": {
+    "literature-fetcher": {
+      "command": "python",
+      "args": ["/ABSOLUTE/PATH/TO/literature-fetcher/scripts/mcp_server.py"]
+    }
+  }
+}
 ```
 
-The AI will execute it, and you'll get:
-- `my_literature.xlsx` — Open in Excel
-- `my_literature.md` — Literature list with abstracts
-- `my_literature.json` — Machine-readable data  
-- `my_literature_keyword_recommendations.md` — Suggested new search terms
+**Then in OpenClaw, just say:**
+> Use literature-fetcher to search AER, JIE, JIMF. Keywords: monetary policy, exchange rate. 2020-2025.
+
+---
+
+#### • Install into Cursor
+
+`Cursor Settings → MCP Servers → Add New MCP Server`:
+
+| Field | Value |
+|-------|-------|
+| Name | `literature-fetcher` |
+| Type | `command` |
+| Command | `python /ABSOLUTE/PATH/TO/literature-fetcher/scripts/mcp_server.py` |
+
+**Then in Cursor, just say:**
+> Use literature-fetcher to search Journal of Finance and JFE for tail risk and currency papers, 2020-2025.
+
+---
+
+### 4. What You Get
+
+Once installed, describe what you need in plain language. The AI calls the tool and returns:
+- ✅ Paper count and summary
+- ✅ Excel file (`.xlsx`)
+- ✅ Markdown file (`.md`)
+- ✅ Keyword recommendations (when enabled)
+- ✅ First 5 results preview with titles, years, and authors
 
 ---
 
