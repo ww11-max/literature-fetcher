@@ -2,29 +2,45 @@
 
 > **[简体中文](README_CN.md) | English**
 
-A free, open-source tool that batch-fetches academic paper metadata from the OpenAlex database. Give it a list of journals, keywords, and a year range — it searches across all combinations, deduplicates results, and outputs a structured table with titles, authors, DOIs, and abstracts.
+A free, open-source tool to batch-download academic paper metadata — titles, authors, journals, years, volumes, issues, DOIs, and abstracts.
 
-No API key needed. No per-journal website visits. Most queries complete in under a minute.
-
-**Output:** Excel (.xlsx), Markdown (.md), plus optional keyword recommendations.
+> **No API key required. Completely free.**
+> Perfect for: literature reviews, grant proposal references, thesis preparation, and systematic paper screening.
 
 ---
+
+## What It Does
+
+If you are a graduate student or researcher who needs to find papers from specific journals on certain topics, this tool can help:
+
+1. **Search** across multiple journals, keywords, and year ranges at once
+2. **Auto-scroll** through all matching papers (no manual pagination)
+3. **Extract** year, authors, title, journal, volume, issue, DOI, and abstract from every paper
+4. **Deduplicate** — papers matching multiple keywords appear only once
+5. **Suggest related keywords** — discover new search terms from the topic labels of your matched papers
+6. **Export** results to **Excel** spreadsheets or **Markdown** documents (easy to paste into Word, Notion, or Overleaf)
+
+### A Quick Example
 
 ```bash
 python scripts/cli.py \
   --journals "Journal of International Economics, Journal of Finance" \
   --keywords "exchange rate, tail risk" \
   --year-start 2020 --year-end 2025 \
-  --output ./my_results
-
-# Returns: my_results.xlsx, my_results.md, keyword recommendations
+  --output ./my_results \
+  --json
 ```
+
+After running, you get:
+- `my_results.xlsx` — Open in Excel, filter, sort, search
+- `my_results.md` — Literature list with abstracts, ready for your notes
+- `my_results.json` — Machine-readable for further processing
 
 ---
 
 ## Quick Start — Install & Invoke Inside AI Assistants
 
-This tool can be installed as an **MCP tool** into your AI coding assistant. Once installed, you just tell the AI "search these journals for these keywords" — it runs automatically. No path typing, no command remembering.
+This tool can be installed as an **MCP tool** into your AI coding assistant. Once installed, you just tell the AI "search these journals for these keywords" — it runs automatically. No path typing or copy-paste required.
 
 ### 1. Install Dependencies
 
@@ -215,3 +231,4 @@ All data comes from [OpenAlex](https://openalex.org/) — a fully free and open 
 ## License
 
 MIT
+
