@@ -1,5 +1,7 @@
 # OpenAlex Literature Fetcher
 
+> **[简体中文](README_CN.md) | English**
+
 A free, open-source tool to batch-download academic paper metadata — titles, authors, journals, years, volumes, issues, DOIs, and abstracts.
 
 > **No API key required. Completely free.**

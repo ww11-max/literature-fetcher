@@ -1,5 +1,7 @@
 # OpenAlex Literature Fetcher
 
+> **简体中文 | [English](README.md)**
+
 批量获取学术论文元数据（标题、作者、期刊、年份、卷期号、DOI、摘要）的开源工具。
 
 > **无需 API 密钥，完全免费。**
