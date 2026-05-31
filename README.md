@@ -1,49 +1,80 @@
 # OpenAlex Literature Fetcher
 
-Batch download academic paper metadata (title, authors, journal, year, volume, issue, DOI, abstract) from [OpenAlex](https://openalex.org/) — a free and open academic graph API.
+A free, open-source tool to batch-download academic paper metadata — titles, authors, journals, years, volumes, issues, DOIs, and abstracts.
 
-> **No API key required.** OpenAlex is completely free.
-> Suitable for literature review, grant proposal reference collection, and research discovery.
+> **No API key required. Completely free.**
+> Perfect for: literature reviews, grant proposal references, thesis preparation, and systematic paper screening.
 
-## Features
+---
 
-- **Batch search** — Multiple journals × multiple keywords × any year range
-- **Auto pagination** — Fetches all results (cursor-based, 100 per page)
-- **Metadata extraction** — Title, authors, journal, year, volume, issue, DOI, abstract
-- **Deduplication** — Unique papers by DOI across overlapping keyword queries
-- **Keyword recommendation** — Suggests related keywords from OpenAlex's topic model
-- **Multi-format export** — XLSX, Markdown, and JSON
+## What It Does
 
-## Quick Start
+If you are a graduate student or researcher who needs to find papers from specific journals on certain topics, this tool can help:
+
+1. **Search** across multiple journals, keywords, and year ranges at once
+2. **Auto-scroll** through all matching papers (no manual pagination)
+3. **Extract** year, authors, title, journal, volume, issue, DOI, and abstract from every paper
+4. **Deduplicate** — papers matching multiple keywords appear only once
+5. **Suggest related keywords** — discover new search terms from the topic labels of your matched papers
+6. **Export** results to **Excel** spreadsheets or **Markdown** documents (easy to paste into Word, Notion, or Overleaf)
+
+### A Quick Example
 
 ```bash
-# Search with CLI
 python scripts/cli.py \
   --journals "Journal of International Economics, Journal of Finance" \
   --keywords "exchange rate, tail risk" \
   --year-start 2020 --year-end 2025 \
   --output ./my_results \
   --json
-
-# Enable keyword recommendations
-python scripts/cli.py \
-  --journals "American Economic Review" \
-  --keywords "monetary policy, spillover" \
-  --year-start 2023 --year-end 2025 \
-  --output ./results \
-  --recommend-keywords
 ```
 
-## Python API
+After running, you get:
+- `my_results.xlsx` — Open in Excel, filter, sort, search
+- `my_results.md` — Literature list with abstracts, ready for your notes
+- `my_results.json` — Machine-readable for further processing
+
+---
+
+## Quick Start
+
+### 1. Install Dependencies
+
+Requires Python 3.8 or higher.
+
+```bash
+pip install requests pandas openpyxl
+```
+
+### 2. Download the Tool
+
+```bash
+git clone https://github.com/ww11-max/openalex-literature-fetcher.git
+cd openalex-literature-fetcher
+```
+
+### 3. Run Your First Search
+
+Search three journals for papers about "tail risk" and "exchange rate" from 2020 to 2025:
+
+```bash
+python scripts/cli.py \
+  --journals "Journal of International Money and Finance, Journal of International Economics, Journal of Finance" \
+  --keywords "tail risk, exchange rate" \
+  --year-start 2020 --year-end 2025 \
+  --output ./my_literature
+```
+
+That's it. The tool will print progress as it searches, then save the results.
+
+---
+
+## Python API (for scripting and automation)
 
 ```python
-from scripts.fetcher import search_multi, to_excel, to_markdown, find_source_id
+from scripts.fetcher import search_multi, to_excel, to_markdown
 
-# Find a journal's OpenAlex ID
-sid, name = find_source_id("Journal of Political Economy")
-# sid = "S95323914", name = "Journal of Political Economy"
-
-# Batch search
+# Search
 df = search_multi(
     journals=["Journal of International Economics", "Journal of Monetary Economics"],
     keywords=["exchange rate", "financial contagion"],
@@ -52,69 +83,75 @@ df = search_multi(
 )
 
 # Export
-to_excel(df, "output.xlsx")
-to_markdown(df, "output.md")
+to_excel(df, "output.xlsx")   # Generates Excel file
+to_markdown(df, "output.md")  # Generates Markdown file with year & journal breakdowns
+```
 
-# With keyword recommendations
+### With Keyword Recommendations
+
+```python
 df, recs = search_multi(
     journals=["JIMF"],
-    keywords=["tail risk", "forex"],
+    keywords=["tail risk"],
     year_start=2024, year_end=2025,
-    recommend_kw=True,
-    top_n_kw=10,
+    recommend_kw=True,     # Enable keyword recommendations
+    top_n_kw=10,           # Get the top 10 suggestions
 )
+# recs = [("Currency", 7.0), ("Emerging markets", 6.3), ...]
 ```
+
+---
 
 ## CLI Reference
 
 | Argument | Default | Description |
 |----------|---------|-------------|
-| `--journals` | (required) | Journal names, comma-separated |
-| `--keywords` | (required) | Search keywords, comma-separated |
+| `--journals` | **required** | Journal names, comma-separated. E.g. `"AER, JIE, JIMF"` |
+| `--keywords` | **required** | Search terms, comma-separated. E.g. `"exchange rate, tail risk"` |
 | `--year-start` | 2018 | Start year |
 | `--year-end` | 2025 | End year |
-| `--output` | `./literature_results` | Output path prefix |
+| `--output` | `./literature_results` | Output path prefix (without file extension) |
 | `--format` | `both` | Output format: `xlsx`, `md`, or `both` |
-| `--json` | (flag) | Also export as JSON |
+| `--json` | (flag) | Also export results as JSON |
 | `--recommend-keywords` | (flag) | Enable keyword recommendation |
 | `--top-n-keywords` | 15 | Number of keywords to recommend |
-| `--no-dedup` | (flag) | Skip deduplication |
+| `--no-dedup` | (flag) | Skip deduplication (not recommended) |
 | `--quiet` | (flag) | Suppress progress output |
+
+---
 
 ## Output Fields
 
-| Field | Description |
-|-------|-------------|
+| Column | Description |
+|--------|-------------|
 | 年份 (Year) | Publication year |
 | 作者 (Authors) | Author names, semicolon-separated (up to 5) |
 | 标题 (Title) | Paper title |
 | 期刊 (Journal) | Journal name |
 | 卷号 (Volume) | Journal volume |
 | 期号 (Issue) | Journal issue |
-| DOI | Digital Object Identifier |
+| DOI | Digital Object Identifier (link to the paper) |
 | 摘要 (Abstract) | Paper abstract |
-| 搜索关键词 (Search Term) | Keyword that matched this paper |
-| OpenAlex ID | OpenAlex paper ID |
+| 搜索关键词 (Search Term) | Which keyword matched this paper |
+| OpenAlex ID | Unique ID in the OpenAlex database |
+
+---
 
 ## How It Works
 
-1. **Journal lookup** — Each journal name is resolved to an OpenAlex Source ID via `/sources` endpoint
-2. **Search** — For each journal+keyword pair, calls `/works` with `filter` (source ID + year range) and `search`
-3. **Pagination** — Uses OpenAlex's cursor-based pagination (100 results per page)
-4. **Extraction** — Parses `primary_location`, `authorships`, `biblio`, `abstract_inverted_index`
-5. **Recommendation** — Aggregates the `keywords` field across all fetched works, ranks by weighted score
-6. **Export** — Writes to XLSX, Markdown, and/or JSON
+1. **Journal lookup** — Each journal name is resolved to an OpenAlex Source ID via the `/sources` endpoint
+2. **Search** — For every journal+keyword combination, call the `/works` API with year range filter
+3. **Pagination** — Uses cursor-based pagination (100 results per page), fetches all pages automatically
+4. **Extraction** — Parses year, authors, title, journal, volume, issue, DOI, and abstract from each result
+5. **Deduplication** — Removes papers with the same DOI across all queries
+6. **Keyword recommendation** — Aggregates OpenAlex's topic labels across all fetched papers, ranks by weighted relevance score
+7. **Export** — Writes to Excel (.xlsx), Markdown (.md), and/or JSON (.json)
 
-## Dependencies
+### Data Source
 
-- Python ≥ 3.8
-- `requests` — HTTP client
-- `pandas` — Data manipulation
-- `openpyxl` — XLSX export (installed with pandas)
+All data comes from [OpenAlex](https://openalex.org/) — a fully free and open index of hundreds of millions of scholarly works, complete with metadata, citations, and author information.
 
-```bash
-pip install requests pandas openpyxl
-```
+---
 
 ## License
 
