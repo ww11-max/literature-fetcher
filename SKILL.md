@@ -1,5 +1,5 @@
 ---
-name: openalex-literature-fetcher
+name: literature-fetcher
 description: >
   批量获取学术文献元数据（标题、作者、期刊、年份、卷期、DOI、摘要）并导出为结构化表格。
   通过 OpenAlex 免费 API 搜索，支持任意期刊、任意关键词、任意年份范围，自动翻页和去重。

@@ -51,8 +51,8 @@ pip install requests pandas openpyxl
 ### 2. 下载工具
 
 ```bash
-git clone https://github.com/ww11-max/openalex-literature-fetcher.git
-cd openalex-literature-fetcher
+git clone https://github.com/ww11-max/literature-fetcher.git
+cd literature-fetcher
 ```
 
 ### 3. 运行搜索
